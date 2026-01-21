@@ -3490,6 +3490,7 @@ pub(crate) mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn test_full_leaf() {
         #[cfg(not(feature = "ml-dsa"))]
         let mut cert_buf = [0u8; 1024];
@@ -3560,6 +3561,7 @@ pub(crate) mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn test_full_ca() {
         #[cfg(not(feature = "ml-dsa"))]
         let mut cert_buf = [0u8; 1024];
