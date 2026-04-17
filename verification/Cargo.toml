@@ -2,8 +2,25 @@
 
 [workspace]
 resolver = "3"
-version = "2024"
 
 members = [
   "panic-check"
 ]
+
+# Production firmware profile - fully optimized, symbols stripped
+[profile.firmware]
+inherits = "release"
+panic = "abort"
+lto = true
+opt-level = "s"
+codegen-units = 1
+
+# Firmware check profile - same optimizations but preserves symbols for analysis
+[profile.firmware-check]
+inherits = "release"
+panic = "abort"
+lto = "thin"           # Use thin LTO to preserve more symbol info
+opt-level = "s"
+codegen-units = 1
+strip = "none"         # Keep all symbols for analysis
+debug = 1              # Minimal debug info to preserve symbol names
