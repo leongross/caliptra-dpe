@@ -389,8 +389,8 @@ fn cargo_miri(
     miri_args: &MiriArgs,
 ) -> Result<()> {
     let mut cmd = match miri_args.nextest {
-        true => cargo().args(["miri", "nextest", "run"]),
-        false => cargo().args(["miri", "test"]),
+        true => cargo().nightly().args(["miri", "nextest", "run"]),
+        false => cargo().nightly().args(["miri", "test"]),
     };
 
     if miri_args.nextest {
@@ -518,6 +518,10 @@ impl Cmd {
         self.0
             .output()
             .map_err(|e| anyhow!("Failed to execute {:?}: {}", self.0, e))
+    }
+    fn nightly(mut self) -> Self {
+        self.0.arg("+nightly");
+        self
     }
 }
 
