@@ -28,12 +28,14 @@
             openssl
             pkg-config
             taplo
+            cargo-nextest
           ];
 
           shellHook = ''
             # Ensure the toolchains are installed
             rustup toolchain install $(grep channel rust-toolchain.toml | cut -d'"' -f2)
-            rustup toolchain install nightly-2025-07-08
+            rustup toolchain install nightly-2025-07-08 nightly
+            rustup +nightly component add miri
           '';
         };
       }
