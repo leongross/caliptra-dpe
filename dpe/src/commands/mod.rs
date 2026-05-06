@@ -44,7 +44,7 @@ mod update_context_measurement;
 
 #[derive(Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "cfi", derive(Launder))]
-#[repr(align(4))]
+#[repr(C)]
 pub enum Command<'a> {
     GetProfile(&'a GetProfileCmd),
     InitCtx(&'a InitCtxCmd),
