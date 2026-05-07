@@ -26,7 +26,7 @@ pub use self::rotate_context::{RotateCtxCmd, RotateCtxFlags};
 use crate::{
     dpe_instance::{DpeEnv, DpeInstance},
     response::{DpeErrorCode, Response},
-    DpeProfile,
+    AlignedBuf, DpeProfile,
 };
 use core::mem::size_of;
 use zerocopy::{FromBytes, Immutable, IntoBytes, KnownLayout};
@@ -326,8 +326,7 @@ pub trait CommandExecution {
     where
         Command<'a>: From<&'a Self>,
     {
-        // miri alignment: use u32 buffer to ensure 4-byte alignment for zerocopy
-        let mut buf = [0u32; size_of::<Response>() / 4];
+        let mut buf = AlignedBuf::<{ size_of::<Response>() }>::new();
         self.execute_serialized(dpe, env, locality, buf.as_mut_bytes())?;
         Response::try_read_from_bytes(&Command::from(self), buf.as_bytes())
     }
@@ -346,8 +345,7 @@ pub trait CommandExecution {
     where
         Command<'a>: From<&'a Self>,
     {
-        // miri alignment: use u32 buffer to ensure 4-byte alignment for zerocopy
-        let mut buf = [0u32; size_of::<Response>() / 4];
+        let mut buf = AlignedBuf::<{ size_of::<Response>() }>::new();
         self.execute_serialized(dpe, env, locality, buf.as_mut_bytes())?;
         Response::try_read_from_bytes(&Command::from(self), buf.as_bytes())
     }
