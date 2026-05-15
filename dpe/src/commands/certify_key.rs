@@ -20,7 +20,6 @@ use cfg_if::cfg_if;
 use zerocopy::{FromBytes, Immutable, IntoBytes, KnownLayout};
 
 #[cfg(not(feature = "disable_x509"))]
-// miri alignment: align(4) ensures zerocopy can safely reference from byte slices
 #[repr(C, align(4))]
 #[derive(Debug, Default, PartialEq, Eq, FromBytes, IntoBytes, Immutable, KnownLayout)]
 pub struct CertifyKeyFlags(pub u32);
@@ -275,7 +274,6 @@ impl CommandExecution for CertifyKeyCommand<'_> {
     }
 }
 
-// miri alignment: align(4) ensures zerocopy can safely reference from byte slices
 #[repr(C, align(4))]
 #[derive(Debug, Default, PartialEq, Eq, FromBytes, IntoBytes, Immutable, KnownLayout)]
 pub struct CertifyKeyP256Cmd {
@@ -299,7 +297,6 @@ impl CommandExecution for CertifyKeyP256Cmd {
     }
 }
 
-// miri alignment: align(4) ensures zerocopy can safely reference from byte slices
 #[repr(C, align(4))]
 #[derive(Debug, PartialEq, Eq, FromBytes, IntoBytes, Immutable, KnownLayout)]
 pub struct CertifyKeyP384Cmd {
@@ -334,7 +331,6 @@ impl CommandExecution for CertifyKeyP384Cmd {
     }
 }
 
-// miri alignment: align(4) ensures zerocopy can safely reference from byte slices
 #[repr(C, align(4))]
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, FromBytes, IntoBytes, Immutable, KnownLayout)]
