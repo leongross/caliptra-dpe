@@ -1,7 +1,7 @@
 // Licensed under the Apache-2.0 license.
 use crate::{
     context::{ChildToRootIter, Children, Context, ContextHandle, ContextState},
-    response::DpeErrorCode,
+    response::{DpeErrorCode, InternalErrorCode},
     support::Support,
     tci::TciNodeData,
     U8Bool, MAX_HANDLES,
@@ -97,7 +97,9 @@ impl State {
     ) -> Result<usize, DpeErrorCode> {
         let idx = self.get_active_context_pos_internal(handle, locality)?;
         if idx >= self.contexts.len() {
-            return Err(DpeErrorCode::InternalError);
+            return Err(DpeErrorCode::InternalError(
+                InternalErrorCode::ContextIndexOob,
+            ));
         }
         Ok(idx)
     }
@@ -134,7 +136,9 @@ impl State {
                     && context.handle.equals(handle)
                     && context.locality == locality
             })
-            .ok_or(DpeErrorCode::InternalError)?;
+            .ok_or(DpeErrorCode::InternalError(
+                InternalErrorCode::ActiveContextNotFound,
+            ))?;
         Ok(i)
     }
 
@@ -159,7 +163,9 @@ impl State {
         let mut descendants = context.children;
         for idx in context.children.iter() {
             if idx >= self.contexts.len() {
-                return Err(DpeErrorCode::InternalError);
+                return Err(DpeErrorCode::InternalError(
+                    InternalErrorCode::DescendantIndexOob,
+                ));
             }
             descendants.add_children(self.get_descendants(&self.contexts[idx])?);
         }
@@ -187,7 +193,9 @@ impl State {
         for status in ChildToRootIter::new(start_idx, &self.contexts) {
             let curr = status?;
             if out_idx >= nodes.len() {
-                return Err(DpeErrorCode::InternalError);
+                return Err(DpeErrorCode::InternalError(
+                    InternalErrorCode::TciNodeArrayOverflow,
+                ));
             }
 
             nodes[out_idx] = curr.tci;
@@ -195,7 +203,9 @@ impl State {
         }
 
         if out_idx > nodes.len() {
-            return Err(DpeErrorCode::InternalError);
+            return Err(DpeErrorCode::InternalError(
+                InternalErrorCode::TciNodeCountExceeded,
+            ));
         }
         nodes[..out_idx].reverse();
 
