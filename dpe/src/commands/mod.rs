@@ -25,7 +25,8 @@ pub use self::rotate_context::{RotateCtxCmd, RotateCtxFlags};
 
 use crate::{
     dpe_instance::{DpeEnv, DpeInstance},
-    response::{DpeErrorCode, Response},
+    error::DpeErrorCode,
+    response::Response,
     DpeProfile,
 };
 use core::mem::size_of;

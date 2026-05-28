@@ -1,7 +1,7 @@
 // Licensed under the Apache-2.0 license.
 use crate::{
     context::{ChildToRootIter, Children, Context, ContextHandle, ContextState},
-    response::{DpeErrorCode, InternalErrorCode},
+    error::{DpeErrorCode, InternalErrorCode},
     support::Support,
     tci::TciNodeData,
     U8Bool, MAX_HANDLES,

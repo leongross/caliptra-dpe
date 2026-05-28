@@ -9,7 +9,8 @@ use crate::INTERNAL_INPUT_INFO_SIZE;
 use crate::{
     commands::{Command, CommandExecution, CommandHdr, InitCtxCmd},
     context::{ChildToRootIter, Context, ContextHandle, ContextState},
-    response::{DpeErrorCode, GetProfileResp, InternalErrorCode, Response, ResponseHdr},
+    error::{DpeErrorCode, InternalErrorCode},
+    response::{GetProfileResp, Response, ResponseHdr},
     support::Support,
     tci::TciMeasurement,
     DpeProfile, State, MAX_HANDLES,

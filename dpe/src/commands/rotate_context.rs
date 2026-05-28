@@ -4,7 +4,8 @@ use crate::{
     context::{ContextHandle, ContextState},
     dpe_instance::{DpeEnv, DpeInstance},
     mutresp,
-    response::{DpeErrorCode, NewHandleResp},
+    error::DpeErrorCode,
+    response::NewHandleResp,
     State,
 };
 use bitflags::bitflags;
