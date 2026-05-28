@@ -211,7 +211,9 @@ impl DpeInstance {
                 return Ok(handle);
             }
         }
-        Err(DpeErrorCode::InternalError(InternalErrorCode::HandleGenerationExhausted))
+        Err(DpeErrorCode::InternalError(
+            InternalErrorCode::HandleGenerationExhausted,
+        ))
     }
 
     /// Rolls the context handle if the context is not the default context.
@@ -275,7 +277,9 @@ impl DpeInstance {
         let digest_bytes = digest.as_slice();
 
         if digest_bytes.len() != context.tci.tci_cumulative.0.len() {
-            return Err(DpeErrorCode::InternalError(InternalErrorCode::DigestLengthMismatch));
+            return Err(DpeErrorCode::InternalError(
+                InternalErrorCode::DigestLengthMismatch,
+            ));
         }
         context.tci.tci_cumulative.0.copy_from_slice(digest_bytes);
         context.tci.tci_current = *measurement;
@@ -301,12 +305,16 @@ impl DpeInstance {
         let profile_bytes = profile.as_bytes();
         internal_input_info
             .get_mut(..profile_bytes.len())
-            .ok_or(DpeErrorCode::InternalError(InternalErrorCode::InputInfoProfileSliceOob))?
+            .ok_or(DpeErrorCode::InternalError(
+                InternalErrorCode::InputInfoProfileSliceOob,
+            ))?
             .copy_from_slice(profile_bytes);
 
         internal_input_info
             .get_mut(profile_bytes.len()..)
-            .ok_or(DpeErrorCode::InternalError(InternalErrorCode::InputInfoRemainderSliceOob))?
+            .ok_or(DpeErrorCode::InternalError(
+                InternalErrorCode::InputInfoRemainderSliceOob,
+            ))?
             .copy_from_slice(&(u32::from(self.profile)).to_le_bytes());
 
         Ok(())
@@ -365,11 +373,9 @@ impl DpeInstance {
             while let Ok(len) =
                 platform.get_certificate_chain(offset, MAX_CHUNK_SIZE as u32, &mut cert_chunk)
             {
-                hasher.update(
-                    cert_chunk
-                        .get(..len as usize)
-                        .ok_or(DpeErrorCode::InternalError(InternalErrorCode::CertChainChunkSliceOob))?,
-                )?;
+                hasher.update(cert_chunk.get(..len as usize).ok_or(
+                    DpeErrorCode::InternalError(InternalErrorCode::CertChainChunkSliceOob),
+                )?)?;
                 offset += len;
             }
         }

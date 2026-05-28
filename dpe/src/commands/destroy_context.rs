@@ -3,8 +3,8 @@ use super::CommandExecution;
 use crate::{
     context::{Children, Context, ContextHandle, ContextState},
     dpe_instance::{DpeEnv, DpeInstance},
-    mutresp,
     error::{DpeErrorCode, InternalErrorCode},
+    mutresp,
     response::ResponseHdr,
     State,
 };
@@ -50,7 +50,9 @@ pub(crate) fn destroy_context(
         if parent_idx == Context::ROOT_INDEX as usize {
             break;
         } else if parent_idx >= state.contexts.len() {
-            return Err(DpeErrorCode::InternalError(InternalErrorCode::DestroyParentIndexOob));
+            return Err(DpeErrorCode::InternalError(
+                InternalErrorCode::DestroyParentIndexOob,
+            ));
         }
         let parent_context = &state.contexts[parent_idx];
         // make sure the retired context does not have other active child contexts
